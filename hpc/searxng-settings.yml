@@ -1,0 +1,19 @@
+# SearXNG settings for the AEL open news-search service (IdeationTeam --auto).
+# Bare-metal run: SEARXNG_SETTINGS_PATH=<this file> $AEL_SEARXNG_VENV/bin/python -m searx.webapp
+# JSON API enabled (for shared/tools/news_search.py); rate-limiter/redis disabled
+# (single trusted local client = the AEL orchestrator on the same node).
+use_default_settings: true
+general:
+  debug: false
+  instance_name: "AEL-SearXNG"
+server:
+  secret_key: "ael-searxng-local-only-not-exposed-change-if-public"
+  limiter: false
+  image_proxy: false
+  port: 8899
+  bind_address: "127.0.0.1"
+search:
+  formats:
+    - html
+    - json
+  # keep default engines (duckduckgo, bing, google, ...); news category used by the client

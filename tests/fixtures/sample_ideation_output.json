@@ -1,0 +1,30 @@
+{
+  "research_questions": [
+    {
+      "question": "How does the adoption of generative AI tools affect labor market polarization across different skill levels in OECD economies?",
+      "theoretical_framework": "Skill-Biased Technical Change (SBTC)",
+      "methodology": "Difference-in-differences with staggered adoption",
+      "priority_score": 0.92,
+      "data_sources": ["OECD PIAAC", "USPTO patent data"]
+    },
+    {
+      "question": "What is the causal effect of AI-assisted monetary policy recommendations on central bank decision-making efficiency?",
+      "theoretical_framework": "Taylor Rule extensions with AI augmentation",
+      "methodology": "Synthetic control method",
+      "priority_score": 0.85,
+      "data_sources": ["FRED", "BIS statistics"]
+    },
+    {
+      "question": "How do large language models influence financial market microstructure through algorithmic trading strategies?",
+      "theoretical_framework": "Market microstructure theory (Kyle 1985)",
+      "methodology": "Event study with high-frequency data",
+      "priority_score": 0.78,
+      "data_sources": ["TAQ database", "SEC EDGAR"]
+    }
+  ],
+  "metadata": {
+    "topic": "Impact of AI on labor markets",
+    "total_sources_reviewed": 25,
+    "generation_method": "automated"
+  }
+}

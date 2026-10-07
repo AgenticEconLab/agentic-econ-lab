@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 AgenticEconLab
+#
+# ModelTeam feature flags for standalone runs of this mode.
+#
+# The standalone orchestrator loads this file when AEL_MODEL_CONFIG is not set, so the
+# model settings of the repository's ael_config.yaml do not apply to those runs; set
+# AEL_MODEL, or AEL_MODEL_CONFIG to the repository's ael_config.yaml, to choose the model.
+# falsifier_enabled also defaults to True in shared/feature_flags.py.
+feature_flags:
+  falsifier_enabled: true        # Theorist + DASES AdversarialFalsifier pair
+  causal_fm_enabled: true        # CalibrationStage emits causal_estimate

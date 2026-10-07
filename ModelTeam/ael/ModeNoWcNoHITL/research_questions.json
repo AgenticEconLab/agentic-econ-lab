@@ -1,0 +1,35 @@
+{
+  "research_topic": "AI agents in economic research",
+  "questions": [
+    {
+      "question": "How does the adoption of agentic AI workflows affect the productivity and reproducibility of empirical economic research?",
+      "priority_rank": 1,
+      "priority_score": 0.95,
+      "theoretical_framework": "Endogenous growth and technology diffusion",
+      "methodology": [
+        "DSGE calibration",
+        "panel regression"
+      ]
+    },
+    {
+      "question": "What are the macroeconomic labor-market effects of widespread automation of knowledge work by AI agents?",
+      "priority_rank": 2,
+      "priority_score": 0.9,
+      "theoretical_framework": "Task-based labor model (Acemoglu-Restrepo)",
+      "methodology": [
+        "agent-based simulation",
+        "calibrated general equilibrium"
+      ]
+    },
+    {
+      "question": "How should monetary policy respond to AI-driven shifts in aggregate productivity and price dynamics?",
+      "priority_rank": 3,
+      "priority_score": 0.85,
+      "theoretical_framework": "New Keynesian DSGE",
+      "methodology": [
+        "Bayesian estimation",
+        "impulse-response analysis"
+      ]
+    }
+  ]
+}

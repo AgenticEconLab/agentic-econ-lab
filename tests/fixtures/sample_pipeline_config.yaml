@@ -1,0 +1,27 @@
+name: test_pipeline
+mode: ModeNoWcNoHITL
+stages:
+  - team: IdeationTeam
+    mode: ModeNoWcNoHITL
+    inputs: [research_topic]
+    outputs: [research_questions]
+    depends_on: []
+  - team: LiteratureTeam
+    mode: ModeNoWcNoHITL
+    inputs: [research_questions]
+    outputs: [literature_review, knowledge_graph, gap_analysis]
+    depends_on: [IdeationTeam]
+  - team: ModelTeam
+    mode: ModeNoWcNoHITL
+    inputs: [research_questions, literature_review]
+    outputs: [model_specification]
+    depends_on: [IdeationTeam, LiteratureTeam]
+  - team: DataTeam
+    mode: open_source_api
+    inputs: [research_questions, model_specification]
+    outputs: [validated_dataset]
+    depends_on: [ModelTeam]
+budget:
+  max_total_cost_usd: 5.0
+  max_per_team_cost_usd: 2.0
+  max_total_tokens: 500000

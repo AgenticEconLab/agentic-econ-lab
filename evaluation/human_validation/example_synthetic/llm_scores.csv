@@ -1,0 +1,17 @@
+item_id,team,output_type,dimension,mistral,gemma
+IDE-RQ-001,IdeationTeam,research_questions,correctness,0.86,0.90
+IDE-RQ-001,IdeationTeam,research_questions,soundness,0.82,0.88
+IDE-RQ-001,IdeationTeam,research_questions,innovation,0.74,0.80
+IDE-RQ-001,IdeationTeam,research_questions,transparency,0.80,0.84
+IDE-RQ-002,IdeationTeam,research_questions,correctness,0.62,0.68
+IDE-RQ-002,IdeationTeam,research_questions,soundness,0.60,0.64
+IDE-RQ-002,IdeationTeam,research_questions,innovation,0.66,0.60
+IDE-RQ-002,IdeationTeam,research_questions,transparency,0.70,0.66
+MOD-SPEC-001,ModelTeam,model_specification,correctness,0.84,0.90
+MOD-SPEC-001,ModelTeam,model_specification,soundness,0.80,0.86
+MOD-SPEC-001,ModelTeam,model_specification,innovation,0.82,0.88
+MOD-SPEC-001,ModelTeam,model_specification,transparency,0.78,0.84
+MOD-SPEC-002,ModelTeam,model_specification,correctness,0.40,0.48
+MOD-SPEC-002,ModelTeam,model_specification,soundness,0.42,0.50
+MOD-SPEC-002,ModelTeam,model_specification,innovation,0.44,0.40
+MOD-SPEC-002,ModelTeam,model_specification,transparency,0.50,0.46

@@ -1,0 +1,64 @@
+{
+  "execution_id": "fixture-ideation-001",
+  "team": "IdeationTeam",
+  "mode": "ModeNoWcNoHITL",
+  "framework": "ael",
+  "started_at": "2026-03-10T10:00:00.000Z",
+  "completed_at": "2026-03-10T10:04:30.000Z",
+  "total_duration_seconds": 270,
+  "metadata": {
+    "research_topic": "Impact of AI on labor markets"
+  },
+  "stages": [
+    {
+      "name": "SourcingStage",
+      "number": 1,
+      "status": "success",
+      "started_at": "2026-03-10T10:00:00.000Z",
+      "completed_at": "2026-03-10T10:01:30.000Z",
+      "duration_seconds": 90,
+      "item_count": 25,
+      "output_files": ["sourcing_output.json"]
+    },
+    {
+      "name": "RefinementStage",
+      "number": 2,
+      "status": "success",
+      "started_at": "2026-03-10T10:01:30.000Z",
+      "completed_at": "2026-03-10T10:03:00.000Z",
+      "duration_seconds": 90,
+      "item_count": 10,
+      "output_files": ["refinement_output.json"]
+    },
+    {
+      "name": "IntegrationStage",
+      "number": 3,
+      "status": "success",
+      "started_at": "2026-03-10T10:03:00.000Z",
+      "completed_at": "2026-03-10T10:04:30.000Z",
+      "duration_seconds": 90,
+      "item_count": 5,
+      "output_files": ["finalized_research_questions_automated.json"]
+    }
+  ],
+  "errors": [],
+  "summary": {
+    "total_stages": 3,
+    "successful_stages": 3,
+    "total_items": 40,
+    "total_errors": 0
+  },
+  "observability": {
+    "llm": {
+      "total_calls": 6,
+      "total_tokens": 12000,
+      "total_cost_usd": 0.0180,
+      "avg_latency_seconds": 2.5,
+      "error_count": 0
+    },
+    "tool": {
+      "total_calls": 3,
+      "error_count": 0
+    }
+  }
+}

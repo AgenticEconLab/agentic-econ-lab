@@ -1,0 +1,9 @@
+{
+  "model": "gpt-4o-mini",
+  "prompt_tokens": 1500,
+  "completion_tokens": 500,
+  "total_tokens": 2000,
+  "response": "Based on the research topic 'Impact of AI on labor markets', here are three refined research questions:\n\n1. How does generative AI adoption affect wage inequality across skill quintiles?\n2. What are the displacement vs. augmentation effects of AI on routine cognitive tasks?\n3. How do AI-driven productivity gains distribute across firm size categories?",
+  "finish_reason": "stop",
+  "latency_seconds": 2.3
+}

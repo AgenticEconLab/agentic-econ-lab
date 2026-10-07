@@ -1,0 +1,140 @@
+# =============================================================================
+# AEL Model Configuration
+# =============================================================================
+# This file controls which LLM model is used for each team and stage.
+# Edit this file to customize models — no code changes needed.
+#
+# Different models can be assigned to different teams and stages. The default is a local
+# open-weight model served by vLLM (default_model below). Standalone ModelTeam runs read the
+# ael_config.yaml in their mode directory instead (README.md, "Configuration").
+#
+# Examples:
+#   - a smaller local model for data extraction, a larger one for reasoning
+#   - a local model for routine stages and a hosted model for others
+#
+# Available providers and models:
+#   OpenAI:     gpt-4o, gpt-4o-mini, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano, o4-mini
+#   Anthropic:  claude-sonnet-4-6, claude-haiku-4-5-20251001, claude-opus-4-6
+#   Google:     gemini-2.5-flash, gemini-2.5-pro
+#   DeepSeek:   deepseek-chat, deepseek-reasoner
+#   Mistral:    mistral-small-latest, mistral-large-latest
+#   Ollama:     ollama/llama-4-scout, ollama/qwen3-32b (free, local)
+#   xAI:        grok-3-mini
+#   OpenRouter:  openrouter/meta-llama/llama-4-scout
+# =============================================================================
+
+# Default model used when no team/stage-specific override is set and AEL_MODEL is unset.
+# Change this to switch ALL stages at once. The default is the open-weight model of the
+# reported runs on a local vLLM server (VLLM_BASE_URL, default http://localhost:11434);
+# use ollama/<name> on a laptop, or a hosted model id with its provider key in .env.
+default_model: vllm/qwen3.6-27b-fp8
+
+# ---------------------------------------------------------------------------
+# Per-team pipeline modes (used by run_ael_pipeline.py for full-pipeline runs)
+# ---------------------------------------------------------------------------
+# Each team can run in a different mode for cross-team pipeline runs.
+#
+# Modes for Ideation / Literature / Model teams (2x2 Wc x HITL matrix):
+#   ModeNoWcNoHITL / ModeWithWcNoHITL / ModeNoWcWithHITL / ModeWithWcWithHITL
+#
+# WithHITL modes ARE pipeline-safe: run_ael_pipeline.py defaults AEL_HITL_MODE to
+# llm_economist, so the 3-model committee resolves every checkpoint headlessly.
+# Set AEL_HITL_MODE=interactive only when a human sits at the console.
+#
+# Workflow types for DataTeam (no Wc/HITL variants):
+#   open_source_api      - FRED, World Bank, IMF, yfinance, etc. (default)
+#   premium_subscribed   - Bloomberg, Refinitiv, WRDS, etc.
+#   user_uploaded        - Local CSV/JSON/Parquet files
+#
+# CLI flags --mode and --data-mode override these defaults when explicitly set.
+# ---------------------------------------------------------------------------
+# Best-mode defaults: flagship WithWcWithHITL for the Wc-axis
+# teams (committee-resolved HITL is headless-safe), NoWcWithHITL for the new §4.5-§4.7
+# teams (no Wc axis).
+pipeline_modes:
+  IdeationTeam: ModeWithWcWithHITL
+  LiteratureTeam: ModeWithWcWithHITL
+  ModelTeam: ModeWithWcWithHITL
+  DataTeam: open_source_api
+  EstimationTeam: ModeNoWcWithHITL
+  ReportingTeam: ModeNoWcWithHITL
+  CodeTeam: ModeNoWcWithHITL
+
+# ---------------------------------------------------------------------------
+# Feature flags
+# ---------------------------------------------------------------------------
+# Each flag switches an optional capability on or off; the values below are the
+# defaults. Override with env vars (e.g. AEL_CAUSAL_FM_ENABLED=1) or by editing
+# this block.
+# ---------------------------------------------------------------------------
+feature_flags:
+  # Economics-domain intelligence
+  causal_fm_enabled: true           # CalibrationStage emits causal_estimate via CausalFMClient
+  simulation_enabled: false         # Run optional 4-SimulationStage after calibration
+  theory_transfer_enabled: false    # Chib-Tan 90/10 theory-guided transfer in CalibrationStage
+
+  # Verification-grade outputs
+  citation_verifier_enabled: true   # Post-process LiteratureTeam + IdeationTeam outputs
+  falsifier_enabled: true           # Pair DASES Falsifier with Theorist in TheoryStage
+  memory_guard_v2: true             # Trust-aware retrieval + belief-drift detection
+
+  # Platform modernization
+  semantic_cache_enabled: false     # LLM response cache (disabled for K=5 reproducibility)
+
+# ---------------------------------------------------------------------------
+# Per-team, per-stage model configuration
+# Uncomment and change any line to override the default for that stage.
+# ---------------------------------------------------------------------------
+
+# IdeationTeam:
+  # Stage 1: Gather sources and identify trends (many short LLM calls)
+#   SourcingStage: gpt-4o-mini
+  # Stage 2: Refine and curate research questions (reasoning-heavy)
+#   RefinementStage: gpt-4o-mini
+  # Stage 3: Synthesize and prioritize final output (structured output)
+#   IntegrationStage: gpt-4o-mini
+
+# LiteratureTeam:
+  # Stage 1: Collect and organize literature (many short calls)
+#   LiteratureGatheringStage: gpt-4o-mini
+  # Stage 2: Identify research gaps (analytical reasoning)
+#   GapDetectionStage: gpt-4o-mini
+  # Stage 3: Generate review and bibliography (synthesis)
+#   SynthesisStage: gpt-4o-mini
+
+# DataTeam:
+  # Stage 1: Connect to data sources and fetch data
+#   DataSourceStage: gpt-4o-mini
+  # Stage 2: Clean and transform data
+#   DataCleaningStage: gpt-4o-mini
+  # Stage 3: Validate and ensure data quality
+#   QualityAssuranceStage: gpt-4o-mini
+
+# ModelTeam:
+  # Stage 1: Develop theoretical framework (deep reasoning)
+#   TheoryStage: gpt-4o-mini
+  # Stage 2: Mathematical formulation and specification
+#   ModelDesignStage: gpt-4o-mini
+  # Stage 3: Parameter estimation and sensitivity analysis
+#   CalibrationStage: gpt-4o-mini
+
+# ---------------------------------------------------------------------------
+# Example: Cost-optimized configuration (fast/cheap extraction, smart reasoning)
+# ---------------------------------------------------------------------------
+# IdeationTeam:
+#   SourcingStage: gpt-4.1-nano          # Fast extraction ($0.10/M)
+#   RefinementStage: deepseek-chat       # Good reasoning ($0.28/M)
+#   IntegrationStage: gpt-4o-mini        # Structured output ($0.15/M)
+#
+# ---------------------------------------------------------------------------
+# Example: Fully local / zero-cost configuration with Ollama
+# ---------------------------------------------------------------------------
+# default_model: ollama/llama-4-scout
+#
+# ---------------------------------------------------------------------------
+# Example: Premium quality configuration
+# ---------------------------------------------------------------------------
+# default_model: gpt-4o
+# ModelTeam:
+#   TheoryStage: claude-opus-4-6         # Best reasoning
+#   CalibrationStage: gpt-4o             # Strong at math

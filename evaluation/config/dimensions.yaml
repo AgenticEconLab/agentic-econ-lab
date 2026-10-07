@@ -1,0 +1,97 @@
+# Evaluation Dimension Configuration
+# This file defines the 14 evaluation dimensions and their metrics.
+# Edit this file to customize dimension weights and thresholds.
+
+version: "1.0"
+
+# Dimension weights (default: 1.0 for all)
+# Higher weight = more important in overall score calculation
+weights:
+  # Quality cluster
+  reliability: 1.0
+  correctness: 1.2  # Slightly higher weight for correctness
+  soundness: 1.0
+  decision_quality: 1.0   # agentic decision quality
+  economic_rigor: 1.0     # economics-domain rigor
+
+  # Operational cluster
+  efficiency: 0.9
+  scalability: 0.8
+  robustness: 1.0
+
+  # Epistemic cluster
+  transparency: 1.0
+  traceability: 1.0
+  reproducibility: 1.1  # Important for scientific workflows
+
+  # Innovation cluster
+  innovation_potential: 0.9
+
+  # Economics cluster
+  simulation_fidelity: 1.0
+  causal_validity: 1.0
+
+# Cluster weights
+cluster_weights:
+  Quality: 1.2
+  Operational: 0.9
+  Epistemic: 1.1
+  Innovation: 0.8
+  Economics: 1.0
+
+# Thresholds for dimension scoring
+thresholds:
+  excellent: 0.8  # >= 0.8 is excellent
+  good: 0.6       # >= 0.6 is good
+  fair: 0.4       # >= 0.4 is fair
+  poor: 0.0       # < 0.4 is poor
+
+# Metric-specific configurations
+metrics:
+  # Reliability metrics
+  output_consistency_cv:
+    min_runs_required: 3
+    target_cv: 0.1  # Target coefficient of variation
+
+  execution_path_stability:
+    min_runs_required: 3
+
+  # Correctness metrics
+  error_rate:
+    acceptable_threshold: 0.5  # Errors per run
+
+  stage_completion_rate:
+    target: 1.0  # All stages should complete
+
+  # Efficiency metrics
+  execution_time:
+    max_acceptable_seconds: 3600  # 1 hour max
+
+  time_per_item:
+    max_acceptable_seconds: 60
+
+  # Robustness metrics
+  error_recovery_rate:
+    target: 0.8  # 80% of errors should be recovered
+
+  # Transparency metrics
+  documentation_coverage:
+    target: 0.9
+
+  # Traceability metrics
+  provenance_completeness:
+    target: 0.95
+
+  # Innovation metrics
+  output_diversity:
+    min_entropy: 0.5
+
+# Framework configuration (AEL is the project's only framework)
+frameworks:
+  ael:
+    supported: true
+    teams:
+      - IdeationTeam
+      - LiteratureTeam
+      - ModelTeam
+      - DataTeam

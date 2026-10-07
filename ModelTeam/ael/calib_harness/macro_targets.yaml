@@ -1,0 +1,365 @@
+# Curated external macro-calibration targets for the deterministic calibration harness.
+#
+# RULES:
+#   * Every value is a REAL, CITED empirical magnitude — NEVER LLM-invented and NEVER back-filled
+#     from a model's own parameters. The harness joins a model-implied moment to a row ONLY by
+#     `moment_key`; a model moment with no row here is dropped (`no_external_target_match`).
+#   * `std_error` is a positive uncertainty band. Where the source reports a formal SE we use it;
+#     otherwise it is a deliberately conservative analyst band spanning the cited literature range
+#     (this is disclosed, not hidden — see each source_citation).
+#   * `frequency` is the native frequency of the target (drives the archetype annualize() step;
+#     the 9.40->2.35 K/Y bug was a quarterly-beta-vs-annual-target unit error, NOT a model failure).
+#   * `fred_series_id` (optional) names a FRED series for an OPTIONAL deterministic recompute that
+#     flows ONLY into the target side. It is documentation here; the locked TargetRow dataclass has
+#     no such field, so targets.py drops it when constructing rows (forward-compatible).
+#
+# Geography defaults to US (the cited empirical literature is US-centric). Sample periods reflect
+# the cited source's estimation window. Vintage is the data release / paper publication reference.
+
+targets:
+
+  # ----------------------------------------------------------------------------------------------
+  # National-accounts ratios (RBC / growth core)
+  # ----------------------------------------------------------------------------------------------
+  - moment_key: capital_output_ratio
+    value: 3.0
+    std_error: 0.3
+    source_citation: "Penn World Table 10.01 (Feenstra, Inklaar & Timmer 2015 AER); US aggregate capital-to-annual-GDP ratio ~3.0; consistent with BEA NIPA Fixed Assets / GDP."
+    geography: US
+    sample_period: "1990-2019"
+    vintage: "PWT 10.01 (2023)"
+    frequency: annual
+
+  - moment_key: investment_output_ratio
+    value: 0.20
+    std_error: 0.02
+    source_citation: "BEA NIPA: gross private domestic investment / GDP ~0.18-0.21 (real); standard RBC I/Y=0.20."
+    geography: US
+    sample_period: "1960-2019"
+    vintage: "BEA NIPA (2024)"
+    frequency: annual
+    fred_series_id: GPDI
+
+  - moment_key: consumption_output_ratio
+    value: 0.66
+    std_error: 0.03
+    source_citation: "BEA NIPA: personal consumption expenditures / GDP ~0.65-0.68."
+    geography: US
+    sample_period: "1960-2019"
+    vintage: "BEA NIPA (2024)"
+    frequency: annual
+    fred_series_id: PCEC
+
+  - moment_key: government_spending_ratio
+    value: 0.20
+    std_error: 0.02
+    source_citation: "BEA NIPA: government consumption expenditures & gross investment / GDP ~0.18-0.21."
+    geography: US
+    sample_period: "1960-2019"
+    vintage: "BEA NIPA (2024)"
+    frequency: annual
+    fred_series_id: GCE
+
+  # ----------------------------------------------------------------------------------------------
+  # Factor shares
+  # ----------------------------------------------------------------------------------------------
+  - moment_key: labor_share
+    value: 0.60
+    std_error: 0.02
+    source_citation: "Karabarbounis & Neiman (2014 QJE) + BLS nonfarm business sector labor share; US corporate labor share ~0.60-0.62, declining from ~0.64-0.66."
+    geography: US
+    sample_period: "1975-2012"
+    vintage: "BLS (2024); K&N (2014)"
+    frequency: annual
+    fred_series_id: PRS85006173
+
+  - moment_key: capital_share
+    value: 0.36
+    std_error: 0.02
+    source_citation: "Cooley & Prescott (1995, in Frontiers of Business Cycle Research) alpha~0.40; Gomme & Rupert (2007 JME) careful measurement ~0.30; standard RBC capital share 0.33-0.36. (Residual vs labor_share = proprietors'/mixed income.)"
+    geography: US
+    sample_period: "1954-2004"
+    vintage: "Gomme-Rupert (2007)"
+    frequency: annual
+
+  # ----------------------------------------------------------------------------------------------
+  # Rates, discounting, depreciation, growth
+  # ----------------------------------------------------------------------------------------------
+  - moment_key: real_interest_rate
+    value: 0.02
+    std_error: 0.005
+    source_citation: "Holston, Laubach & Williams (2017 JIE) natural rate r* ~0.5-2.0%; long-run US safe real rate ~1-2% annual."
+    geography: US
+    sample_period: "1985-2019"
+    vintage: "HLW (NY Fed, 2024 update)"
+    frequency: annual
+    fred_series_id: DFII10
+
+  - moment_key: discount_factor
+    value: 0.96
+    std_error: 0.01
+    source_citation: "Standard DSGE/RBC calibration: annual beta~0.96 (quarterly ~0.99); Cooley & Prescott (1995); Smets & Wouters (2007 AER). Implied net return on capital ~4% annual (distinct from the safe r* in real_interest_rate)."
+    geography: US
+    sample_period: "n/a (calibration convention)"
+    vintage: "Smets-Wouters (2007)"
+    frequency: annual
+
+  - moment_key: depreciation_rate
+    value: 0.06
+    std_error: 0.01
+    source_citation: "BEA Fixed Assets implied aggregate depreciation ~6%/yr; Cooley & Prescott (1995) delta=0.012 quarterly (~0.048 annual); standard RBC ~0.06-0.10 annual."
+    geography: US
+    sample_period: "1960-2019"
+    vintage: "BEA Fixed Assets (2024)"
+    frequency: annual
+
+  - moment_key: tfp_growth_rate
+    value: 0.012
+    std_error: 0.005
+    source_citation: "Fernald (2014, FRBSF Working Paper 2012-19) utilization-adjusted total factor productivity growth ~1.0-1.5%/yr."
+    geography: US
+    sample_period: "1947-2013"
+    vintage: "Fernald (FRBSF, 2024 update)"
+    frequency: annual
+
+  - moment_key: tfp_shock_persistence
+    value: 0.95
+    std_error: 0.02
+    source_citation: "Smets & Wouters (2007 AER) estimated AR(1) of the (neutral) productivity shock ~0.95 (quarterly)."
+    geography: US
+    sample_period: "1966-2004"
+    vintage: "Smets-Wouters (2007)"
+    frequency: quarterly
+
+  # ----------------------------------------------------------------------------------------------
+  # Production technology: substitution elasticities
+  # ----------------------------------------------------------------------------------------------
+  - moment_key: substitution_elasticity_KL
+    value: 0.50
+    std_error: 0.10
+    source_citation: "Chirinko (2008, J. Macroeconomics 30(2)) 'sigma: The long and short of it' — capital-labor substitution elasticity ~0.40-0.60 (below Cobb-Douglas)."
+    geography: US
+    sample_period: "1972-1998"
+    vintage: "Chirinko (2008)"
+    frequency: annual
+
+  - moment_key: elasticity_substitution_goods
+    value: 6.0
+    std_error: 1.0
+    source_citation: "Christiano, Eichenbaum & Evans (2005 JPE) and standard NK calibration: elasticity of substitution across differentiated goods epsilon~6 (implies a ~20% gross price markup)."
+    geography: US
+    sample_period: "n/a (calibration convention)"
+    vintage: "CEE (2005)"
+    frequency: quarterly
+
+  # ----------------------------------------------------------------------------------------------
+  # Price-setting (New Keynesian)
+  # ----------------------------------------------------------------------------------------------
+  - moment_key: calvo_price_stickiness
+    value: 0.66
+    std_error: 0.05
+    source_citation: "Nakamura & Steinsson (2008 QJE): median duration of regular (ex-sales) consumer prices ~8-11 months -> Calvo non-adjustment probability theta~0.66 per quarter."
+    geography: US
+    sample_period: "1988-2005"
+    vintage: "Nakamura-Steinsson (2008)"
+    frequency: quarterly
+
+  - moment_key: price_duration_quarters
+    value: 3.0
+    std_error: 0.5
+    source_citation: "Nakamura & Steinsson (2008 QJE): expected price duration ~9-11 months (~3 quarters), consistent with Calvo theta=0.66 (1/(1-theta)=2.94)."
+    geography: US
+    sample_period: "1988-2005"
+    vintage: "Nakamura-Steinsson (2008)"
+    frequency: quarterly
+
+  - moment_key: nkpc_slope
+    value: 0.03
+    std_error: 0.02
+    source_citation: "Hazell, Herreno, Nakamura & Steinsson (2022 QJE): slope of the New Keynesian Phillips Curve estimated small, ~0.006-0.05 (quarterly)."
+    geography: US
+    sample_period: "1978-2018"
+    vintage: "HHNS (2022)"
+    frequency: quarterly
+
+  - moment_key: price_markup
+    value: 1.20
+    std_error: 0.15
+    source_citation: "De Loecker, Eeckhout & Unger (2020 QJE): aggregate gross markup rose ~1.21 (1980) -> ~1.61 (2016); NK steady-state markup ~1.1-1.2. Band spans the literature."
+    geography: US
+    sample_period: "1980-2016"
+    vintage: "DLEU (2020)"
+    frequency: annual
+
+  # ----------------------------------------------------------------------------------------------
+  # Monetary policy (Taylor rule)
+  # ----------------------------------------------------------------------------------------------
+  - moment_key: taylor_phi_pi
+    value: 1.5
+    std_error: 0.25
+    source_citation: "Taylor (1993, Carnegie-Rochester Conf. Series) original rule coefficient on inflation = 1.5; estimated values ~1.5-2.0 (Clarida, Gali & Gertler 2000 QJE)."
+    geography: US
+    sample_period: "1987-1992"
+    vintage: "Taylor (1993)"
+    frequency: quarterly
+
+  - moment_key: taylor_phi_y
+    value: 0.5
+    std_error: 0.15
+    source_citation: "Taylor (1993, Carnegie-Rochester Conf. Series) original rule coefficient on the output gap = 0.5."
+    geography: US
+    sample_period: "1987-1992"
+    vintage: "Taylor (1993)"
+    frequency: quarterly
+
+  - moment_key: taylor_smoothing
+    value: 0.80
+    std_error: 0.05
+    source_citation: "Clarida, Gali & Gertler (2000 QJE) and Smets & Wouters (2007 AER): interest-rate smoothing (lagged-rate) coefficient rho_i ~0.8 (quarterly)."
+    geography: US
+    sample_period: "1979-2004"
+    vintage: "CGG (2000); Smets-Wouters (2007)"
+    frequency: quarterly
+
+  - moment_key: trend_inflation
+    value: 0.02
+    std_error: 0.005
+    source_citation: "FOMC longer-run PCE inflation objective of 2% (formalized 2012); average core PCE inflation ~2% annual."
+    geography: US
+    sample_period: "1995-2019"
+    vintage: "FOMC (2024); BEA core PCE"
+    frequency: annual
+    fred_series_id: PCEPILFE
+
+  # ----------------------------------------------------------------------------------------------
+  # Household preferences & labor supply
+  # ----------------------------------------------------------------------------------------------
+  - moment_key: frisch_elasticity
+    value: 0.75
+    std_error: 0.25
+    source_citation: "Chetty, Guren, Manoli & Weber (2011 AER P&P) meta-analysis: intensive-margin Frisch ~0.5, aggregate (incl. extensive margin) Frisch elasticity of labor supply ~0.75-1.0."
+    geography: US
+    sample_period: "meta-analysis"
+    vintage: "Chetty et al. (2011)"
+    frequency: annual
+
+  - moment_key: intertemporal_elasticity_substitution
+    value: 0.5
+    std_error: 0.2
+    source_citation: "Hall (1988 JPE) low IES; Best, Cloyne, Ilzetzki & Kleven (2020 ReStud) IES ~0.1-0.5; common DSGE calibration IES=0.5 (CRRA sigma=2)."
+    geography: US
+    sample_period: "meta/quasi-experimental"
+    vintage: "BCIK (2020)"
+    frequency: annual
+
+  - moment_key: relative_risk_aversion
+    value: 2.0
+    std_error: 0.5
+    source_citation: "Standard DSGE calibration of CRRA coefficient (inverse of IES); sigma=2 (Smets & Wouters 2007 AER; Christiano-Eichenbaum-Evans 2005 JPE)."
+    geography: US
+    sample_period: "n/a (calibration convention)"
+    vintage: "Smets-Wouters (2007)"
+    frequency: annual
+
+  - moment_key: hours_worked_fraction
+    value: 0.33
+    std_error: 0.03
+    source_citation: "Cooley & Prescott (1995): households allocate ~1/3 of discretionary time to market work; consistent with BLS American Time Use Survey."
+    geography: US
+    sample_period: "1948-1991"
+    vintage: "Cooley-Prescott (1995); ATUS"
+    frequency: annual
+
+  - moment_key: labor_supply_elasticity_firm
+    value: 2.0
+    std_error: 1.0
+    source_citation: "Sokolova & Sorensen (2021, ILR Review) meta-analysis of monopsony: firm-level labor supply elasticity median ~1-2 (wide dispersion 0.5-5+)."
+    geography: "US/intl"
+    sample_period: "meta-analysis"
+    vintage: "Sokolova-Sorensen (2021)"
+    frequency: annual
+
+  # ----------------------------------------------------------------------------------------------
+  # Investment frictions & AI/intangible capital
+  # ----------------------------------------------------------------------------------------------
+  - moment_key: capital_adjustment_cost
+    value: 4.0
+    std_error: 2.0
+    source_citation: "Smets & Wouters (2007 AER) estimated investment-adjustment-cost (S'') parameter ~5.7; Christiano-Eichenbaum-Evans (2005 JPE) ~2-3. Band spans these."
+    geography: US
+    sample_period: "1966-2004"
+    vintage: "Smets-Wouters (2007)"
+    frequency: quarterly
+
+  - moment_key: ai_capital_depreciation_rate
+    value: 0.20
+    std_error: 0.05
+    source_citation: "BEA depreciation rates for software & R&D intangibles (Li & Hulten 2010 NBER; BEA): ~0.15-0.55/yr; AI/software capital depreciates far faster than physical capital."
+    geography: US
+    sample_period: "1995-2019"
+    vintage: "BEA intangibles (2024)"
+    frequency: annual
+
+  # ----------------------------------------------------------------------------------------------
+  # Inequality (runnable ABM archetypes — sim_backends; kinetic income/wealth-exchange model)
+  # ----------------------------------------------------------------------------------------------
+  - moment_key: income_gini
+    value: 0.39
+    std_error: 0.02
+    source_citation: "OECD Income Distribution Database: US Gini of disposable household income ~0.39-0.40 (2015-2022). Kinetic income-exchange ABMs (Yakovenko & Rosser 2009 Rev.Mod.Phys.) are conventionally fit to the income Gini."
+    geography: US
+    sample_period: "2015-2022"
+    vintage: "OECD IDD (2024)"
+    frequency: annual
+
+  # ----------------------------------------------------------------------------------------------
+  # Monetary / HANK moments (the moments monetary-policy models naturally
+  # define; inflation_volatility is consumed by the runnable nk_taylor archetype in sim_backends)
+  # ----------------------------------------------------------------------------------------------
+  - moment_key: inflation_volatility
+    value: 0.012
+    std_error: 0.004
+    source_citation: "Std dev of year-over-year US CPI inflation, 1990-2019 (Great Moderation sample) ~1.0-1.5pp; Stock & Watson (2007 JMCB) document the post-1984 decline in inflation volatility."
+    geography: US
+    sample_period: "1990-2019"
+    vintage: "BLS CPI (2024)"
+    frequency: annual
+
+  - moment_key: mpc
+    value: 0.25
+    std_error: 0.08
+    source_citation: "Quarterly marginal propensity to consume out of transitory income: Johnson, Parker & Souleles (2006 AER) find 20-40% spent within 3 months; Kaplan & Violante (2014 ECMA) hand-to-mouth-consistent MPC ~0.25."
+    geography: US
+    sample_period: "2001-2008 rebate episodes"
+    vintage: "JPS (2006) / Kaplan-Violante (2014)"
+    frequency: quarterly
+
+  - moment_key: skill_wage_premium
+    value: 1.8
+    std_error: 0.15
+    source_citation: "College/high-school full-time weekly wage ratio ~1.8 (Autor 2014 Science 'Skills, education, and the rise of earnings inequality'; Acemoglu & Autor 2011 Handbook ch.12)."
+    geography: US
+    sample_period: "2000-2012"
+    vintage: "Autor (2014)"
+    frequency: annual
+
+  # ----------------------------------------------------------------------------------------------
+  # Output-growth time-series moments (consumed by the var_growth runnable archetype)
+  # ----------------------------------------------------------------------------------------------
+  - moment_key: output_growth_volatility
+    value: 0.018
+    std_error: 0.005
+    source_citation: "Std dev of annual US real GDP growth, 1990-2019 ~1.5-2.2pp (BEA NIPA table 1.1.1); Stock & Watson (2007 JMCB) document the Great-Moderation decline in output volatility."
+    geography: US
+    sample_period: "1990-2019"
+    vintage: "BEA NIPA (2024)"
+    frequency: annual
+
+  - moment_key: output_growth_persistence
+    value: 0.30
+    std_error: 0.15
+    source_citation: "First-order autocorrelation of US real GDP growth: quarterly ~0.3-0.4 (King & Rebelo 1999 Handbook of Macro ch.14; Stock-Watson); annual samples lower. Deliberately wide analyst band."
+    geography: US
+    sample_period: "1947-2019"
+    vintage: "BEA NIPA (2024)"
+    frequency: annual

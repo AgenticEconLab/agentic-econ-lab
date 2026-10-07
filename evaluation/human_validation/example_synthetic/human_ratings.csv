@@ -1,0 +1,9 @@
+rater_id,item_id,team,output_type,correctness,soundness,innovation,transparency,notes
+r1,IDE-RQ-001,IdeationTeam,research_questions,5,4,4,4,strong questions
+r1,IDE-RQ-002,IdeationTeam,research_questions,3,3,4,4,
+r1,MOD-SPEC-001,ModelTeam,model_specification,5,4,5,4,well specified
+r1,MOD-SPEC-002,ModelTeam,model_specification,2,3,2,3,weak identification
+r2,IDE-RQ-001,IdeationTeam,research_questions,5,5,3,4,
+r2,IDE-RQ-002,IdeationTeam,research_questions,4,3,3,3,
+r2,MOD-SPEC-001,ModelTeam,model_specification,4,4,5,5,
+r2,MOD-SPEC-002,ModelTeam,model_specification,2,2,2,3,

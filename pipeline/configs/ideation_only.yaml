@@ -1,0 +1,16 @@
+pipeline:
+  name: "ideation_only"
+  mode: "ModeNoWcNoHITL"
+  output_dir: "pipeline_output"
+
+  stages:
+    - team: IdeationTeam
+      mode: ModeNoWcNoHITL
+      inputs: [research_topic]
+      outputs: [research_questions]
+      depends_on: []
+
+  budget:
+    max_total_cost_usd: 1.00
+    max_per_team_cost_usd: 1.00
+    max_total_tokens: 100000

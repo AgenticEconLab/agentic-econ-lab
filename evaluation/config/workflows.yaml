@@ -1,0 +1,343 @@
+# Workflow Registry Configuration
+# Defines available workflows for evaluation.
+
+version: "1.0"
+
+# Team configurations
+teams:
+  IdeationTeam:
+    description: "Research question generation from trending topics"
+    frameworks:
+      - ael
+    modes:
+      - name: ModeNoWcNoHITL
+        description: "No Firecrawl, No Human-in-the-Loop"
+        firecrawl: false
+        hitl: false
+      - name: ModeNoWcWithHITL
+        description: "No Firecrawl, With Human-in-the-Loop"
+        firecrawl: false
+        hitl: true
+      - name: ModeWithWcNoHITL
+        description: "With Firecrawl, No Human-in-the-Loop"
+        firecrawl: true
+        hitl: false
+      - name: ModeWithWcWithHITL
+        description: "With Firecrawl, With Human-in-the-Loop"
+        firecrawl: true
+        hitl: true
+    stages:
+      - number: 1
+        name: Sourcing
+        description: "Gather literature and identify trends"
+        agents:
+          - TrendSurfer
+          - CorpusScout
+          - ScholarSearcher
+          - GreyScout
+      - number: 2
+        name: Refinement
+        description: "Generate and refine research questions"
+        agents:
+          - Ideator
+          - Refiner
+      - number: 3
+        name: Integration
+        description: "Contextualize and finalize questions"
+        agents:
+          - Contextualizer
+          - Finalizer
+    outputs:
+      stage1:
+        - literature_results_automated.csv
+        - literature_results.csv
+      stage2:
+        - refinement_results_automated.json
+        - refinement_results.json
+      stage3:
+        - finalized_research_questions_automated.json
+        - finalized_research_questions_automated.txt
+        - finalized_research_questions.json
+        - finalized_research_questions.txt
+    default_inputs:
+      research_topic: "AI and economics"
+
+  LiteratureTeam:
+    description: "Automated literature review with gap analysis"
+    frameworks:
+      - ael
+    modes:
+      - name: ModeNoWcNoHITL
+        description: "No Firecrawl, No Human-in-the-Loop"
+        firecrawl: false
+        hitl: false
+      - name: ModeNoWcWithHITL
+        description: "No Firecrawl, With Human-in-the-Loop"
+        firecrawl: false
+        hitl: true
+      - name: ModeWithWcNoHITL
+        description: "With Firecrawl, No Human-in-the-Loop"
+        firecrawl: true
+        hitl: false
+      - name: ModeWithWcWithHITL
+        description: "With Firecrawl, With Human-in-the-Loop"
+        firecrawl: true
+        hitl: true
+    stages:
+      - number: 1
+        name: LiteratureGathering
+        description: "Collect relevant literature"
+        agents:
+          - TopicCrawler
+          - TrendTracker
+          - CiteKeeper
+          - InsightSummarizer
+      - number: 2
+        name: GapDetection
+        description: "Identify research gaps"
+        agents:
+          - PaperDecomposer
+          - GapFinder
+          - KnowledgeWeaver
+      - number: 3
+        name: Synthesis
+        description: "Synthesize findings"
+        agents:
+          - KnowledgeWeaver
+          - CiteKeeper
+    outputs:
+      stage1:
+        - literature_batch.json
+        - literature_items.csv
+      stage2:
+        - gap_analysis_results.json
+        - research_gaps.csv
+        - knowledge_graph.json
+      stage3:
+        - synthesis_results.json
+        - literature_review.txt
+        - research_plan.txt
+        - bibliography.txt
+    default_inputs:
+      research_topic: "AI and economics"
+
+  ModelTeam:
+    description: "Economic model development and calibration"
+    frameworks:
+      - ael
+    modes:
+      - name: ModeNoWcNoHITL
+        description: "No Firecrawl, No Human-in-the-Loop"
+        firecrawl: false
+        hitl: false
+      - name: ModeNoWcWithHITL
+        description: "No Firecrawl, With Human-in-the-Loop"
+        firecrawl: false
+        hitl: true
+      - name: ModeWithWcNoHITL
+        description: "With Firecrawl, No Human-in-the-Loop"
+        firecrawl: true
+        hitl: false
+      - name: ModeWithWcWithHITL
+        description: "With Firecrawl, With Human-in-the-Loop"
+        firecrawl: true
+        hitl: true
+    stages:
+      - number: 1
+        name: Theory
+        description: "Develop theoretical framework"
+        agents:
+          - Theorist
+      - number: 2
+        name: ModelDesign
+        description: "Design mathematical model"
+        agents:
+          - ModelDesigner
+      - number: 3
+        name: Calibration
+        description: "Calibrate and validate model"
+        agents:
+          - Calibrator
+    outputs:
+      stage1:
+        - theory_output.json
+      stage2:
+        - model_design_output.json
+      stage3:
+        - calibration_output.json
+        - calibrated_models.txt
+        - calibrated_parameters.csv
+    default_inputs:
+      research_question: "How does AI affect labor markets?"
+      model_type: "dsge"
+
+  DataTeam:
+    description: "Data collection and processing"
+    frameworks:
+      - ael
+    modes:
+      - name: ModeOpenSourceAPI
+        description: "Open-source data APIs (FRED, World Bank)"
+        data_source: open_source
+      - name: ModePremiumSubscribed
+        description: "Premium/subscribed data sources"
+        data_source: premium
+      - name: ModeUserUploaded
+        description: "User-uploaded datasets"
+        data_source: user_uploaded
+    stages:
+      - number: 1
+        name: DataSource
+        description: "Identify and access data sources"
+        agents:
+          - DataSourcer
+      - number: 2
+        name: DataCleaning
+        description: "Clean and preprocess data"
+        agents:
+          - DataCleaner
+      - number: 3
+        name: QualityAssurance
+        description: "Validate data quality"
+        agents:
+          - QualityChecker
+    outputs:
+      stage1:
+        - api_source_output.json
+        - data_source_output.json
+      stage2:
+        - api_cleaning_output.json
+        - data_cleaning_output.json
+      stage3:
+        - api_qa_output.json
+        - quality_assurance_output.json
+    default_inputs:
+      data_source: "FRED"
+      indicators:
+        - GDP
+        - CPI
+
+  # Empirical Estimation & Validation. No Wc axis — 2 modes only;
+  # the LLM proposes an EstimationSpec, the deterministic statsmodels harness disposes.
+  EstimationTeam:
+    description: "Empirical estimation of the model specification on retrieved data"
+    frameworks:
+      - ael
+    modes:
+      - name: ModeNoWcNoHITL
+        description: "Fully automated estimation"
+        firecrawl: false
+        hitl: false
+      - name: ModeNoWcWithHITL
+        description: "Specification-review checkpoint after Stage 1 (one bounded revision)"
+        firecrawl: false
+        hitl: true
+    stages:
+      - number: 1
+        name: Estimation
+        description: "Propose the estimating specification; deterministic OLS/HAC fit"
+        agents:
+          - Estimator
+      - number: 2
+        name: ValidationDiagnostics
+        description: "Deterministic diagnostics battery; severe failures downgrade the verdict"
+        agents:
+          - Validator
+      - number: 3
+        name: InferenceRobustness
+        description: "Theory-derived hypothesis tests and robustness sweeps"
+        agents:
+          - HypothesisTester
+    outputs:
+      stage1:
+        - estimation_output.json
+      stage2:
+        - validation_output.json
+      stage3:
+        - inference_output.json
+
+  # Interpretation & Reporting. Terminal pipeline node; the number-
+  # consistency check verifies every number in the report against source artifacts.
+  ReportingTeam:
+    description: "Research-report assembly with deterministic number-consistency verification"
+    frameworks:
+      - ael
+    modes:
+      - name: ModeNoWcNoHITL
+        description: "Fully automated reporting"
+        firecrawl: false
+        hitl: false
+      - name: ModeNoWcWithHITL
+        description: "Draft-review checkpoint after Stage 2 (one bounded narrative revision)"
+        firecrawl: false
+        hitl: true
+    stages:
+      - number: 1
+        name: Interpretation
+        description: "Deterministic economic magnitudes + figures from the estimation artifact"
+        agents:
+          - ResultsInterpreter
+      - number: 2
+        name: Drafting
+        description: "Deterministic report assembly; LLM narrative blocks at marked slots"
+        agents:
+          - Reporter
+      - number: 3
+        name: Quality
+        description: "Number-consistency check annotated on the report"
+        agents:
+          - Proofreader
+    outputs:
+      stage1:
+        - interpretation_output.json
+      stage2:
+        - drafting_output.json
+        - research_report.md
+      stage3:
+        - quality_output.json
+
+  # Code Implementation & Debugging. Modules are DERIVED from the
+  # parsed sympy system (no LLM-written code); validation is an executed check battery.
+  CodeTeam:
+    description: "Derived model-code generation, executed validation, comparative statics"
+    frameworks:
+      - ael
+    modes:
+      - name: ModeNoWcNoHITL
+        description: "Fully automated derivation + validation"
+        firecrawl: false
+        hitl: false
+      - name: ModeNoWcWithHITL
+        description: "Module-interface review checkpoint after Stage 1 (recorded)"
+        firecrawl: false
+        hitl: true
+    stages:
+      - number: 1
+        name: CodeGeneration
+        description: "Derive runnable modules from the parsed equation system (sympy -> pycode)"
+        agents:
+          - Coder
+      - number: 2
+        name: Validation
+        description: "Executed checks: compiles, finite residuals, steady state, sensitivity"
+        agents:
+          - Debugger
+      - number: 3
+        name: Experimentation
+        description: "Comparative statics around the calibrated point"
+        agents:
+          - BatchRunner
+    outputs:
+      stage1:
+        - generation_output.json
+      stage2:
+        - validation_output.json
+      stage3:
+        - experimentation_output.json
+
+# Default evaluation settings
+evaluation:
+  default_n_runs: 3
+  default_timeout_seconds: 3600
+  capture_logs: true
+  output_base_dir: outputs/

@@ -1,0 +1,60 @@
+pipeline:
+  name: "full_research_pipeline"
+  mode: "ModeNoWcNoHITL"
+  output_dir: "pipeline_output"
+
+  stages:
+    - team: IdeationTeam
+      mode: ModeWithWcWithHITL
+      inputs: [research_topic]
+      outputs: [research_questions]
+      depends_on: []
+
+    - team: LiteratureTeam
+      mode: ModeWithWcWithHITL
+      inputs: [research_questions]
+      outputs: [literature_review, knowledge_graph, gap_analysis]
+      depends_on: [IdeationTeam]
+
+    - team: ModelTeam
+      mode: ModeWithWcWithHITL
+      inputs: [research_questions, literature_review]
+      outputs: [model_specification]
+      depends_on: [IdeationTeam, LiteratureTeam]
+
+    - team: DataTeam
+      mode: open_source_api
+      inputs: [research_questions, model_specification]
+      outputs: [validated_dataset, data_source]
+      depends_on: [ModelTeam]
+
+    # Runs AFTER the Model<->Data feasibility loop (orchestrator defers it) so it
+    # estimates the final, possibly-revised model on the retrieved data.
+    - team: EstimationTeam
+      mode: ModeNoWcWithHITL
+      inputs: [research_questions, model_specification, data_source]
+      outputs: [estimation_results]
+      depends_on: [DataTeam]
+
+    # Optional 7th node: derived model code + executed validation +
+    # comparative statics. Deferred past the feasibility loop like Estimation/Reporting.
+    - team: CodeTeam
+      mode: ModeNoWcWithHITL
+      inputs: [model_design, model_specification]
+      outputs: [executable_model]
+      depends_on: [ModelTeam]
+      enabled: false
+
+    # Terminal node: assembles the research report from every artifact with the
+    # deterministic number-consistency check annotated on the report.
+    - team: ReportingTeam
+      mode: ModeNoWcWithHITL
+      inputs: [research_questions, literature_review, model_specification,
+               data_source, estimation_results]
+      outputs: [research_report]
+      depends_on: [EstimationTeam]
+
+  budget:
+    max_total_cost_usd: 5.00
+    max_per_team_cost_usd: 2.00
+    max_total_tokens: 2000000   # sized for the 7-team committee pipeline

@@ -1,0 +1,74 @@
+# Environment & secrets
+.env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+*.whl
+
+# Virtual environments
+.venv/
+venv/
+.virtualenv_appdata/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# Execution outputs (keep structure, ignore generated files)
+**/output/
+**/outputs/
+pipeline_output/
+
+# Evaluation generated outputs
+results/
+evaluation/multirun_results/
+evaluation/observability_results/
+evaluation/viz_output/
+
+# Local run trees (read by evaluation/audits/hallucination_audit.py) and unparseable judge responses
+logs/
+evaluation/_unparseable_responses/
+
+# Telemetry
+otel_traces.json
+
+# Large binary files
+*.mp3
+*.whl
+
+# Runtime memory DBs (auto-recreated at runtime; never ship)
+*.db
+*.sqlite*
+memory/long_term/
+memory/episodic/
+memory/short_term/
+
+# Regenerable evaluation result files (produced by run_ael_evaluation.py / analysis)
+evaluation/evaluation_results*.json
+evaluation/tier2_multirun*.json
+evaluation/innovation_analysis*.json
+evaluation/multi_eval_*.json
+# Example/stale research-question copies in ModelTeam dirs (research_questions.json is a kept input)
+*/ael/*/example_research_questions_simple.json
